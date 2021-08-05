@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:security="http://www.springframework.org/schema/security"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/security 
+http://www.springframework.org/schema/security/spring-security-2.0.4.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	<context:component-scan base-package="com.*"/>
+    
+	<jaxrs:server address="/job">
+
+		<jaxrs:serviceBeans>
+			<ref bean="spJobController" />
+		</jaxrs:serviceBeans>
+
+
+		<jaxrs:providers>
+			<ref bean="jacksonJsonProvider" />
+			<bean class="com.vinodh.exceptionhandling.GenericExceptionMapper" />
+		</jaxrs:providers>
+
+	</jaxrs:server>
+
+	<bean id="jacksonMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+		<property name="dateFormat">
+			<bean class="java.text.SimpleDateFormat">
+				<constructor-arg value="yyyy-MM-dd HH:mm:ss" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="jacksonJsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+		<property name="mapper" ref="jacksonMapper" />
+	</bean>
+	
+	<bean id="spJobController" class="com.vinodh.controller.SpJobController"/>
+	
+</beans>
